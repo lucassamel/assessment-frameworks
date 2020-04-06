@@ -1,77 +1,23 @@
 import axios from "axios";
 
 const state = {
-    itens: [
-      {
-        "id": 1,
-        "title": "Pão",
-        "src":"https://abrilboaforma.files.wordpress.com/2017/03/thinkstockphotos-177781964.jpg",
-        "descricao": "Ótimo site! Me ajudou a encontrar bons locais para comer.",
-        "estoque": 2
-      },
-      {
-        "id": 2,
-        "title": "Coca-Cola",
-        "src":"https://abrilboaforma.files.wordpress.com/2017/03/thinkstockphotos-177781964.jpg",
-        "descricao": "Ótimo site! Me ajudou a encontrar bons locais para comer.",
-        "estoque": 2
-      },
-      {
-        "id": 3,
-        "title": "Leite",
-        "src":"https://abrilboaforma.files.wordpress.com/2017/03/thinkstockphotos-177781964.jpg",
-        "descricao": "Ótimo site! Me ajudou a encontrar bons locais para comer.",
-        "estoque": 2
-      },
-      {
-        "id": 4,
-        "title": "Leite",
-        "src":"https://abrilboaforma.files.wordpress.com/2017/03/thinkstockphotos-177781964.jpg",
-        "descricao": "Ótimo site! Me ajudou a encontrar bons locais para comer.",
-        "estoque": 2
-      },
-      {
-        "id": 5,
-        "title": "Leite",
-        "src":"https://abrilboaforma.files.wordpress.com/2017/03/thinkstockphotos-177781964.jpg",
-        "descricao": "Ótimo site! Me ajudou a encontrar bons locais para comer.",
-        "estoque": 2
-      },
-      {
-        "id": 6,
-        "title": "Leite",
-        "src":"https://abrilboaforma.files.wordpress.com/2017/03/thinkstockphotos-177781964.jpg",
-        "descricao": "Ótimo site! Me ajudou a encontrar bons locais para comer.",
-        "estoque": 2
-      },
-      {
-        "id": 7,
-        "title": "Leite",
-        "src":"https://abrilboaforma.files.wordpress.com/2017/03/thinkstockphotos-177781964.jpg",
-        "descricao": "Ótimo site! Me ajudou a encontrar bons locais para comer.",
-        "estoque": 2
-      },
-      {
-        "id": 8,
-        "title": "Leite",
-        "src":"https://abrilboaforma.files.wordpress.com/2017/03/thinkstockphotos-177781964.jpg",
-        "descricao": "Ótimo site! Me ajudou a encontrar bons locais para comer.",
-        "estoque": 2
-      },
-
-    ]
+  itens: []
+    
   };
 
   const getters = {
-    allItens: state => state.itens
+    allItens: state => state.itens,
+    itenById: (state) => (id) => (state.itens.filter(t => t.id == id))[0],
   };
   
   const actions = {
-    getComments({ commit }) {
+  
+
+    getItens({ commit }) {
       axios.get(
-        this.state
+        "https://5e850ecfa8fdea00164acf6f.mockapi.io/itens"
       ).then((response) => {
-        commit('getItens', response.data);
+        commit('getItens', response.data[0].itens);
       });
     },
   
@@ -85,11 +31,27 @@ const state = {
         "src":new_iten.src,
       }
       commit("addIten", response);
-    }
+    },
+    deleteIten({ commit }, id) {
+      commit("removeIten", id);
+    },
+    updateIten({ commit }, updIten) {
+      commit("updateIten", updIten);
+    },
   };
   const mutations = {
-    getComments: (state, itens) => (state.itens = itens),
+    getItens: (state, itens) => (state.itens = itens),
     addIten: (state, new_iten) => state.itens.push(new_iten),
+    updateIten: (state, updIten) => {
+      const index = state.itens.findIndex(i => i.id === updIten.id)
+      if (index !== -1) {
+        state.itens.splice(index, 1, updIten);
+        }
+      },
+      removeIten: (state, id) =>
+    (state.itens = state.itens.filter(t => t.id !== id)),
+
+    
   };
   
   export default {

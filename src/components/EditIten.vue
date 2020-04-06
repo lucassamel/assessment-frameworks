@@ -1,12 +1,11 @@
 <template>
-  <div>
-    <h1>Cadastro de Novos itens</h1>
-    <div class="form">
-      <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+    <div>
+        <div class="form">
+      <b-form @submit.prevent="onSubmit" @reset="onReset" >
         <b-form-group id="input-group-1" label="Nome do Item:" label-for="input-1" description>
-          <b-form-input
+          <b-form-input            
             id="input-1"
-            v-model="form.title"
+            v-model="iten_add.title"
             type="text"
             required
             placeholder="Entre com o nome do item"
@@ -16,7 +15,7 @@
         <b-form-group id="input-group-2" label="Descricao do Item:" label-for="input-2">
           <b-form-input
             id="input-2"
-            v-model="form.descricao"
+            v-model="iten_add.descricao"
             required
             placeholder="Entre com a descrição do item"
           ></b-form-input>
@@ -25,7 +24,7 @@
         <b-form-group id="input-group-2" label="Quantidade" label-for="input-2">
           <b-form-input
             id="input-2"
-            v-model="form.estoque"
+            v-model="iten_add.estoque"
             type="number"
             pattern=".{1,}"
             required
@@ -40,36 +39,36 @@
         <pre class="m-0">{{ form }}</pre>
       </b-card>-->
     </div>
-  </div>
+
+    </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
+import { mapGetters, mapActions } from "vuex";
 export default {
-  name: "cadastro",
-  data() {
+    name:"EditIten",
+     data() {
     return {
-      form: {
+      id:this.$route.params.id,
+      iten_add :{
         title: "",
         descricao: "",
-        src:
-          "https://abrilboaforma.files.wordpress.com/2017/03/thinkstockphotos-177781964.jpg",
-        estoque: ""
-      },
-      show: true
-    };
+        estoque:""
+      }
+    }
+  },computed: mapGetters(["itenById"]),
+  created() {
+    this.iten_add = this.itenById(this.id)
   },
   methods: {
-    ...mapActions(["addIten"]),
-
-    onSubmit(evt) {
-      this.addIten(this.form);
-      evt.preventDefault();
-      alert(JSON.stringify("Item adicionado com secesso!!!"));
-    },
-    onReset(evt) {
-      evt.preventDefault();
+    ...mapActions(["updateIten"]),
+    onSubmit() {
+      this.updateIten(this.iten_add);
+      alert("Item editado com sucesso!")
+    }
+  },
+  onReset() {
+      
       // Reset our form values
       this.form.title = "";
       this.form.descricao = "";
@@ -79,13 +78,12 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
-    }
-  }
-};
+    },
+    
+    
+}
 </script>
 
-<style >
-.form {
-  margin: 24px;
-}
+<style  scoped>
+
 </style>

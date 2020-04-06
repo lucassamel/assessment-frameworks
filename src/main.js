@@ -7,14 +7,17 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import store from "./store";
 
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import { BootstrapVue, IconsPlugin, BootstrapVueIcons } from 'bootstrap-vue'
+
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
+Vue.use(BootstrapVueIcons)
 
 Vue.use(VueRouter)
+
 
 Vue.config.productionTip = false
 
